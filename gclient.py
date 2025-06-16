@@ -1082,6 +1082,8 @@ class Dependency(gclient_utils.WorkItem, DependencySettings):
     if progress:
       progress._total = len(hooks)
     for hook in hooks:
+      if hook.name == "tools_traffic_annotation_windows":
+        continue
       if progress:
         progress.update(extra=hook.name or '')
       hook.run()

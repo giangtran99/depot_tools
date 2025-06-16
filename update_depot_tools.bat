@@ -21,7 +21,16 @@ SHIFT
 
 IF EXIST "%DEPOT_TOOLS_DIR%.disable_auto_update" GOTO :EOF
 
-set GIT_URL=https://chromium.googlesource.com/chromium/tools/depot_tools.git
+
+for /f "delims=" %%i in ('git remote -v ^| findstr /R "^origin"') do (
+    set "line=%%i"
+    REM Extract URL before the third space (before "(fetch)" or "(push)")
+    for /f "tokens=1,2,3" %%a in ("%line%") do (
+    set GIT_URL=%%b
+    )
+)
+
+echo "%GIT_URL%"
 
 :: Will download git and python.
 call "%DEPOT_TOOLS_DIR%bootstrap\win_tools.bat"
